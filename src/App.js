@@ -1,24 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { getPhotosFromAPI } from './utils/api'
+import ImageList from './components/ImageList'
 import './App.css';
 
 const App = () => {
   const [searchText, setSearchText] = useState('')
-  const [photos, setPhotos] = useState([])
+  const [images, setImages] = useState([])
+
+  const fetchFromAPI = async () => {
+    const data = await getPhotosFromAPI(searchText)
+    console.log(data)
+    setImages(data.results)
+  }
 
   const handleChange = (event) => {
     setSearchText(event.target.value)
   }
 
-  const handleClick = async () => {
-    const photosFromAPI = await getPhotosFromAPI
-  }
-
   return (
     <div className="App">
-      Image Search Gallery
-      <input type="text" className="locationInput" id="locationInput" onChange={handleChange}></input>
-      <button onClick={handleClick}>Get forecast</button>
+      <h1>Image Search Gallery</h1>
+      
+      <div>
+        <input type="text" className="locationInput" id="locationInput" onChange={handleChange}></input>
+        <button onClick={fetchFromAPI}>Search</button>
+        <ImageList images={images}/>
+      </div>
     </div>
   );
 }
